@@ -20,7 +20,8 @@ subroutine apply_wave_operator( s, ux, uy, uz, C, Mux, Muy, Muz )
   call compute_divergence( ux, uy, uz, work1 )
 
   ! Compute the continuity update.
-  C = - ( ux * rho_x + uy * rho_y + uz * rho_z ) / rho - rho * work1 / rho
+  C = - ( ux * rho_x + uy * rho_y + uz * rho_z ) / rho - rho * work1 / rho &
+      - ( vx * rho_x + vy * rho_y + vz * rho_z ) / rho
 
   ! Compute the gradient of condensation.
   call compute_gradient( s, work1, work2, work3 )
@@ -54,17 +55,17 @@ subroutine apply_wave_operator( s, ux, uy, uz, C, Mux, Muy, Muz )
   Muz = Muz + ( mu / rho ) * ( compute_dx( work1 ) + compute_dy( work2 ) + compute_dz( work3 ) )
 
   ! Compute the ( s * grad(rho) * v ) v / rho term.
-  if ( rank == root ) call notify('      Computing ( s * grad( rho ) * v ) v.' )
-  Mux = Mux - s * ( rho_x * vx + rho_y * vy + rho_z * vz ) * vx / rho
-  Muy = Muy - s * ( rho_x * vx + rho_y * vy + rho_z * vz ) * vy / rho
-  Muz = Muz - s * ( rho_x * vx + rho_y * vy + rho_z * vz ) * vz / rho
+  !if ( rank == root ) call notify('      Computing ( s * grad( rho ) * v ) v.' )
+  !Mux = Mux - s * ( rho_x * vx + rho_y * vy + rho_z * vz ) * vx / rho
+  !Muy = Muy - s * ( rho_x * vx + rho_y * vy + rho_z * vz ) * vy / rho
+  !Muz = Muz - s * ( rho_x * vx + rho_y * vy + rho_z * vz ) * vz / rho
 
   ! Compute the ( grad(s) * v ) v term.
-  if ( rank == root ) call notify('      Computing ( grad( s ) * v ) v.' )
-  call compute_gradient( s, work1, work2, work3 )
-  Mux = Mux - ( work1 * vx + work2 * vy + work3 * vz ) * vx
-  Muy = Muy - ( work1 * vx + work2 * vy + work3 * vz ) * vy
-  Muz = Muz - ( work1 * vx + work2 * vy + work3 * vz ) * vz
+  !if ( rank == root ) call notify('      Computing ( grad( s ) * v ) v.' )
+  !call compute_gradient( s, work1, work2, work3 )
+  !Mux = Mux - ( work1 * vx + work2 * vy + work3 * vz ) * vx
+  !Muy = Muy - ( work1 * vx + work2 * vy + work3 * vz ) * vy
+  !Muz = Muz - ( work1 * vx + work2 * vy + work3 * vz ) * vz
 
   ! Compute the grad( beta * s ) term.
   if ( rank == root ) call notify('      Computing gradient( beta * s ).' )
