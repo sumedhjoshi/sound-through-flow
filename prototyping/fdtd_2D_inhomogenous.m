@@ -1,10 +1,10 @@
-% data = fdtd_2D_inhomogenous( x, t, s0, u0, rho0, v0, c0 );
+% data = fdtd_2D_inhomogenous( x, y, t, s0, ux0, uy0, rho0, vx0, vy0, c0 );
 function data = fdtd_2D_inhomogenous( x, y, t, s0, ux0, uy0, rho0, vx0, vy0, c0 )
 
    % Get some grid constants.
-   hx = min( diff( x ) );
-   hy = min( diff( y ) );
-   n  = sqrt(length(x));
+   n  = sqrt( length( x ) );
+   hx = ( max( x ) - min( x ) ) / n;
+   hy = ( max( y ) - min( y ) ) / n;
 
    % Set some time stepping parameters.
    dt   = t(2) - t(1);
@@ -71,7 +71,7 @@ function data = fdtd_2D_inhomogenous( x, y, t, s0, ux0, uy0, rho0, vx0, vy0, c0 
       Ux(:,ii) = Ux(:,ii-1) - dt * beta * D1x * S(:,ii-1) / rho0  ...
                             - dt * Vx(:, 1) .* (D1x * Ux(:,ii-1)) ...
                             - dt * Vy(:, 1) .* (D1y * Ux(:,ii-1)) ...
-                            - dt * ( (D1x * S(:,ii-1)).*Vx(:,ii) + (D1x * S(:,ii-1)).*Vx(:,1) ).*Vx(:,1);
+                            - dt * ( (D1x * S(:,ii-1)).*Vx(:,1) + (D1x * S(:,ii-1)).*Vx(:,1) ).*Vx(:,1);
 
       % Build the velocity in y.
       Uy(:,ii) = Uy(:,ii-1) - dt * beta * D1y * S(:,ii-1) / rho0   ...
@@ -81,6 +81,17 @@ function data = fdtd_2D_inhomogenous( x, y, t, s0, ux0, uy0, rho0, vx0, vy0, c0 
 
    end
 
+   % Pack the data for output.
+   data.S  = S;
+   data.Ux = Ux;
+   data.Uy = Uy;
+   data.t  = t;
+   data.x  = x;
+   data.y  = y;
+   data.physics.c0   = c0;
+   data.physics.Vx   = Vx;
+   data.physics.Vy   = Vy;
+   data.physics.rho0 = rho0;
 
 end
 
