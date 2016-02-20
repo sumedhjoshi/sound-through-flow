@@ -92,15 +92,15 @@ function data = fdtd_2D_inhomogenous( x, y, t, s0, ux0, uy0, rho0, vx0, vy0, c0 
    end
 
    % Pack the data for output.
-   data.S  = S;
-   data.Ux = Ux;
-   data.Uy = Uy;
+   data.S  = reshape( S,  [ n, n, length(t) ] );
+   data.Ux = reshape( Ux, [ n, n, length(t) ] );
+   data.Uy = reshape( Uy, [ n, n, length(t) ] );
    data.t  = t;
    data.x  = x;
    data.y  = y;
    data.physics.c0   = c0;
-   data.physics.Vx   = Vx;
-   data.physics.Vy   = Vy;
+   data.physics.Vx   = reshape( Vx, n, n );
+   data.physics.Vy   = reshape( Vy, n, n );
    data.physics.rho0 = rho0;
 
 end

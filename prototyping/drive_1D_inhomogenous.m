@@ -13,7 +13,7 @@ u0    = 0 * x;
 % Set some physical constants.
 c0   = 343;
 rho0 = 1.0;
-v0   = 100;
+v0   = 50 * ( 1 +  randn( n, 1 ) );
 
 % Set the time discretization.
 dt = ( x(2) - x(1) ) / c0 / 20;
@@ -25,5 +25,5 @@ data = fdtd_1D_inhomogenous( x, t, s0, u0, rho0, v0, c0 );
 
 % Plot the solution with arrival time lines.
 plot( data.x, data.S(:,end) );
-vline( t(end) * ( v0 + c0 ), 'r' );
-vline( - t(end) * ( c0 - v0 ), 'r' );
+vline( t(end) * ( mean( v0 ) + c0 ), 'r' );
+vline( - t(end) * ( c0 - mean( v0 ) ), 'r' );

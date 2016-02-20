@@ -30,11 +30,6 @@ function data = fdtd_1D_inhomogenous( x, t, s0, u0, rho0, v0, c0 )
     sD1n(end,end) = 1/h;
     sD1n(end,end-1) = -1/h;
 
-    % Second order central difference.
-    D2 = diag(-2*ones(n,1)) + diag(1*ones(n-1,1),1) + diag(1*ones(n-1,1),-1);
-    D2 = (1/h^2)*D2;
-    sD2 = sparse(D2);
-
    % Build the time-advancment operator.
    A = sparse( [ speye(n,n) - dt * diag(v0) * sD1d, -dt * sD1n; ...
                 -dt * diag(c0).^2 * sD1d, speye(n,n) - dt * diag(v0) .* sD1n ] );
