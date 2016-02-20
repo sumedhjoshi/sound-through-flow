@@ -29,10 +29,10 @@ c   = 343.0;
    tfinal = 0.25;
 
    % Set the discretization constants.
-   n  = 10;
-   mx = 8;
-   my = 8;
-   mz = 8;
+   n  = 12;
+   mx = 12;
+   my = 12;
+   mz = 12;
 
 % Build the grid.
 [x y z] = sem_build_cartesian_mesh( n, mx, my, mz, Lx, Ly, Lz );
