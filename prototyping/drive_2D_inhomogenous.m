@@ -11,14 +11,14 @@ Y = Y(:);
 
 % Set the initial condition.
 sigma = 10;
-s0    = exp( 1 - ( X.^2 + Y.^2 ) / sigma^2 );
+s0    = exp( - ( X.^2 + Y.^2 ) / sigma^2 );
 ux0   = 0 * X;
 uy0   = 0 * Y;
 
 % Set some physical constants.
 c0   = 343;
 rho0 = 1.0;
-vx0  = 50;
+vx0  = 300;
 vy0  = 0;
 
 % Set the time discretization.

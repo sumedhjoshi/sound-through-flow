@@ -7,7 +7,7 @@ x = linspace( -L, L, n );
 
 % Set the initial condition.
 sigma = 10;
-s0    = exp( 1 - x.^2 / sigma^2 );
+s0    = exp( - x.^2 / sigma^2 );
 u0    = 0 * x;
 
 % Set some physical constants.
