@@ -5,11 +5,11 @@
 % 23 June 2015.
 
 % Add some paths.
-addpath( genpath( '/home/smj96/Dropbox/repos/spectral-element-method-acoustics' ) );
-addpath( genpath( '/Users/joshi/Dropbox/repos/spectral-element-method-acoustics' ) );
+addpath( genpath( '/home/smj96/Dropbox/repos/sound-through-flow' ) );
+addpath( genpath( '/Users/joshi/Dropbox/repos/sound-through-flow' ) );
 
 % Set the run-name.
-runname = 'gaussiansource';
+runname = 'crossflow';
 
 % Set some physics constants.
 rho = 1.02;
@@ -18,15 +18,15 @@ c   = 343.0;
 % Set some parameters.
 
    % Set the Gaussian width.
-   sigma = 25.0;
+   sigma = 10.0;
 
    % Set the domain size.
-   Lx = [-400, 400];
-   Ly = [-400, 400];
-   Lz = [-400, 400];
+   Lx = [-250, 250];
+   Ly = [-250, 250];
+   Lz = [-250, 250];
 
    % Set the final time in the simulation.
-   tfinal = 1.0;
+   tfinal = 0.25;
 
    % Set the discretization constants.
    n  = 10;
@@ -44,12 +44,17 @@ s = exp( -( x.^2 + y.^2 + z.^2 ) / ( sigma.^2 ) );
 rho  = 1.02;
 beta = rho * c^2;
 
+% Set the background velocities.
+vx = 300.0;
+vy = 0.0;
+vz = 0.0;
+
 % Write the initial conditions file.
 sem_write_initfile( n, mx, my, mz, ...
                     x, y, z, ...
                     s, 0, 0, 0, ...
                     rho, beta, ...
-                    0, 0, 0, ...
+                    vx, vy, vz, ...
                     [ pwd '/' runname '_init.h5' ] );
 
 % Set the time-step based on the CFL condition.
@@ -68,7 +73,7 @@ input.Lx = Lx;
 input.Ly = Ly;
 input.Lz = Lz;
 input.mu = 0.0;
-input.dt = dt / 10.0;
+input.dt = dt / 25.0;
 input.t_final = tfinal;
 input.report_every_n_steps = 1;
 input.timesteps_between_writes = 100; % Don't write until the end.
