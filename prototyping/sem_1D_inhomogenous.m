@@ -12,7 +12,11 @@ function data = fdtd_1D_inhomogenous( n, mx, x, t, s0, u0, rho0, v0, c0 )
 
    % Set the sound speed and background flow.
    c = c0;
-   V = v0;
+   if ( length( v0 ) == 1 )
+      V = v0 * ones( n * mx, 1 );
+   else
+      V = v0;
+   end
    beta = rho0 * c0.^2;
 
    % Get the grid element width.
@@ -63,21 +67,44 @@ function data = fdtd_1D_inhomogenous( n, mx, x, t, s0, u0, rho0, v0, c0 )
    S = U;
    U(:,1) = u0;
    S(:,1) = s0;
+   M0 = 0 * u0;
+   M1 = 0 * u0;
+   M2 = 0 * u0;
+   C0 = 0 * u0;
+   C1 = 0 * u0;
+   C2 = 0 * u0;
    for ii = 2:length(t)
+
       p( ii, Nt, 1);
+
+      % Compute the continuity and momentum updates.
+      C0 = ( V .* ( D1 * S(:,ii-1) ) + D1 * U(:,ii-1) );
+      M0 = ( V .* ( D1 * U(:,ii-1) ) + U(:,ii-1) .* ( D1 * V ) + S(:,ii-1) .* V .* ( D1 * V ) +  beta * D1 * S(:,ii-1) / rho );
 
       % Depending on the time step, use a particular ABk method.
       switch ii
          case 2
-            S(:,ii) = S(:,ii-1) - dt * D1 * U(:,ii-1);
-            U(:,ii) = U(:,ii-1) - dt * beta * D1 * S(:,ii-1) / rho;
+            S(:,ii) = S(:,ii-1) - dt * C0;
+            U(:,ii) = U(:,ii-1) - dt * M0;
+            %S(:,ii) = S(:,ii-1) - dt * ( V .* ( D1 * S(:,ii-1) ) + D1 * U(:,ii-1) );
+            %U(:,ii) = U(:,ii-1) - dt * ( V .* ( D1 * U(:,ii-1) ) +  +  beta * D1 * S(:,ii-1) / rho );
          case 3
-            S(:,ii) = S(:,ii-1) - dt * D1 * ( 1.5 * U(:,ii-1) - 0.5 * U(:,ii-2) );
-            U(:,ii) = U(:,ii-1) - dt * ( beta / rho ) * D1 * ( 1.5 * S(:,ii-1) - 0.5 * S(:,ii-2) );
+            S(:,ii) = S(:,ii-1) - dt * ( 1.5 * C0 - 0.5 * C1 );
+            U(:,ii) = U(:,ii-1) - dt * ( 1.5 * M0 - 0.5 * M1 );
+            %S(:,ii) = S(:,ii-1) - dt * D1 * ( 1.5 * U(:,ii-1) - 0.5 * U(:,ii-2) );
+            %U(:,ii) = U(:,ii-1) - dt * ( beta / rho ) * D1 * ( 1.5 * S(:,ii-1) - 0.5 * S(:,ii-2) );
          otherwise
-            S(:,ii) = S(:,ii-1) - dt * D1 * ( (23/12) * U(:,ii-1) - 4/3 * U(:,ii-2)  + 5/12 * U(:,ii-3));
-            U(:,ii) = U(:,ii-1) - dt * ( beta / rho ) * D1 * ( 23/12 * S(:,ii-1) - 4/3 * S(:,ii-2) + 5/12*S(:,ii-3) );
+            S(:,ii) = S(:,ii-1) - dt * ( 23/12 * C0 - 4/3 * C1 + 5/12 * C2 );
+            U(:,ii) = U(:,ii-1) - dt * ( 23/12 * M0 - 4/3 * M1 + 5/12 * M2 );
+            %S(:,ii) = S(:,ii-1) - dt * D1 * ( (23/12) * U(:,ii-1) - 4/3 * U(:,ii-2)  + 5/12 * U(:,ii-3));
+            %U(:,ii) = U(:,ii-1) - dt * ( beta / rho ) * D1 * ( 23/12 * S(:,ii-1) - 4/3 * S(:,ii-2) + 5/12*S(:,ii-3) );
       end
+
+      % Time advance the lagging terms.
+      M2 = M1;
+      C2 = C1;
+      M1 = M0;
+      C1 = C0;
 
    end
 
