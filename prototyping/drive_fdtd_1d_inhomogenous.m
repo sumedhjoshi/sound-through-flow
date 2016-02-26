@@ -1,7 +1,7 @@
 
 
 % Set some constants.
-n = 512;
+n = 4*512;
 L = 500;
 x = linspace( -L, L, n );
 
@@ -13,7 +13,7 @@ u0    = 0 * x;
 % Set some physical constants.
 c0   = 343;
 rho0 = 1.0;
-v0   = 100;
+v0   = 300;
 
 % Set the time discretization.
 dt = ( x(2) - x(1) ) / c0 / 20;

@@ -1,7 +1,7 @@
 
 
 % Set some constants.
-n = 16;
+n = 10;
 m = 32;
 L = 500;
 x = linspace( -L, L, n );
