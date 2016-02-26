@@ -59,6 +59,6 @@ function [x, y, z] = sem_build_cartesian_mesh( n, mx, my, mz, xlims, ylims, zlim
     XI  = XI  - min(XI)  + zlims(1);
 
     % Do the meshgrid.
-    [x y z] = ndgrid( ETA, CHI, XI );
+    [z y x] = ndgrid( XI, CHI, ETA );
 
 end

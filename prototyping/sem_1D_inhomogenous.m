@@ -1,6 +1,6 @@
 %
 % data = sem_1D_inhomogenous( n, mx, x, t, s0, u0, rho0, v0, c0 );
-function data = fdtd_1D_inhomogenous( n, mx, x, t, s0, u0, rho0, v0, c0 )
+function data = sem_1D_inhomogenous( n, mx, x, t, s0, u0, rho0, v0, c0 )
 
    % Set some constants.
    rho  = 1.02;

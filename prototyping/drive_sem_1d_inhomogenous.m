@@ -7,8 +7,8 @@ L = 500;
 x = linspace( -L, L, n );
 
 % Build a 1D sem cartesian mesh.
-[x junk junk] = sem_build_cartesian_mesh( n, m, m, m, [ -L, L ], [ -L, L ], [ -L, L ] );
-x = x(:,1,1);
+[junk junk x] = sem_build_cartesian_mesh( n, m, m, m, [ -L, L ], [ -L, L ], [ -L, L ] );
+x = x(1,1,:);
 
 % Set the initial condition.
 sigma = 10;
